@@ -1,5 +1,3 @@
-import {notAllowed} from './validators';
-
 const internals = {};
 
 internals.getValidatorName = validator =>
@@ -60,8 +58,6 @@ export function check(value, validators, context, callback) {
   });
 
   if (!isAsync) { return failed; }
-
-  // callback(null, failed);
 
   internals.asyncEach(asyncValidators, (validator, next) => {
 

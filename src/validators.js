@@ -114,13 +114,10 @@ export var oneOf = v(array => value => {
 export var itemSync = v(validators => function (value) {
 
   let success = true;
-  value.forEach(item => {
-
-    if (check(item, validators, this).length !== 0) {
-      success = false;
-    }
+  value.forEach(item =>
+    check(item, validators, this).length !== 0 ?
+      (success = false) : null
   });
-
   return success;
 }, {
   name: 'item',

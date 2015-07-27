@@ -1,3 +1,5 @@
+import {check} from './validator';
+
 export function v(origConstructor, properties) {
 
   let constructor = function () {
@@ -20,7 +22,11 @@ export var required = v(() => function (value) {
   name: 'required'
 });
 
-export var isType = v(type => value => (typeof value === type), {
+export var isType = v(type => value => {
+
+  if (type === 'array') { return Array.isArray(value); }
+  return typeof value === type;
+}, {
   name: 'type',
   when: [required()]
 });
@@ -103,4 +109,20 @@ export var oneOf = v(array => value => {
 }, {
   name: 'enum',
   when: [required()]
+});
+
+export var itemSync = v(validators => function (value) {
+
+  let success = true;
+  value.forEach(item => {
+
+    if (check(item, validators, this).length !== 0) {
+      success = false;
+    }
+  });
+
+  return success;
+}, {
+  name: 'item',
+  when: [isType('array'), required()]
 });

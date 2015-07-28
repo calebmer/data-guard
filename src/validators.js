@@ -24,8 +24,13 @@ export var required = v(() => function (value) {
 
 export var isType = v(type => value => {
 
+  if (typeof value === type) { return true; }
   if (type === 'array') { return Array.isArray(value); }
-  return typeof value === type;
+  if (type === 'number') {
+    value = parseInt(value);
+    if (value !== NaN) { return true; }
+  }
+  return false;
 }, {
   name: 'type',
   when: [required()]
